@@ -11,9 +11,8 @@ var argv = process.argv.slice(2)
       return console.log(err);
     }
     if(data) {
-      console.log(data);
+      console.log('Updated your package.json file with build and watch scripts.');
     }
-    console.log('Updated your package.json file with build and watch scripts.');
   }
   ;
 
