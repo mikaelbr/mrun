@@ -1,0 +1,71 @@
+#!/usr/bin/env node
+
+var argv = process.argv.slice(2)
+  , mrun = require('../mrun')
+  , fs = require('fs')
+  , handleResponse = function (err, data) {
+    if (err && err.errno && err.errno === 34) {
+      return console.log('Theres no package.json file in this directory.');
+    }
+    if(err) {
+      return console.log(err);
+    }
+    if(data) {
+      console.log(data);
+    }
+    console.log('Updated your package.json file with build and watch scripts.');
+  }
+  ;
+
+if (!argv.length) {
+  return mrun(handleResponse);
+}
+
+if (argv[0] === '-h' || argv[0] === '--help' || argv[0] === '?') {
+  return usage();
+}
+
+if (argv[0] === '-v' || argv[0] === '--version') {
+  return fs.readFile(__dirname + "/../package.json", function (err, data) {
+    var jsonData;
+    if (err) return handleResponse(err);
+    try {
+      jsonData = JSON.parse(data);
+      console.log('mrun version:', jsonData.version || '0.0.0');
+    } catch(ex) {
+      handleResponse("Package.json in an illegal format.");
+    }
+  });
+}
+
+if (argv.length !== 3) {
+  console.log('If you\'re not using the default, you need to define all three arguments. See help by using argument -h, --help or ?');
+}
+
+mrun({
+    style: argv[0]
+  , browser: argv[1]
+  , target: argv[2]
+}, handleResponse);
+
+function usage () {
+  console.log([
+                "Usage: mrun [ \"style directory\" \"browser code directory\" \"target directory\" ] "
+              , "(run in package root dir)."
+              , ""
+              , "-----"
+              , ""
+              , "Update package.json file with run scripts text to build or watch"
+              , "less and javascripts files."
+              , ""
+              , "-----"
+              , ""
+              , "Argument overview:"
+              , "Style directory: Where the less files are"
+              , "Browser code directory: Where the browserify compatible code resides."
+              , "Target directory: Where the compiled files are placed."
+              , ""
+              , "Without arguments the defaults are: [ 'style', 'browser', 'static' ]"
+              , ""
+            ].join("\n"));
+}

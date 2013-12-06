@@ -1,0 +1,21 @@
+{
+  "name": "mrun",
+  "version": "0.0.5",
+  "description": "A simple tool for setting script properties on packages.json for watching/building less and browserify code.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bin": {
+    "mrun": "./bin/mrun"
+  },
+  "keywords": [
+    "browserify",
+    "less",
+    "build",
+    "watch",
+    "npm"
+  ],
+  "author": "Mikael Brevik <mikaelbre@gmail.com>",
+  "license": "MIT"
+}
