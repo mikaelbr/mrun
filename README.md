@@ -63,10 +63,10 @@ mrun(handleRespone);
 
 // Or with options:
 mrun({
-  style: 'anotherStyleDirectory',
-  browser: 'anotherBrowserDirectory',
-  target: 'anotherTargetDirectory'
-}, handleRespone);
+      style: 'anotherStyleDirectory'
+    , browser: 'anotherBrowserDirectory'
+    , target: 'anotherTargetDirectory'
+  }, handleRespone);
 ```
 
 ## Credits
