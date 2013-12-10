@@ -51,7 +51,7 @@ mrun
 npm install mrun
 ```
 
-```
+```javascript
 var mrun = require('mrun')
   , handleRespone = function(err, newPackage) {
     if(err) throw Error(err);
