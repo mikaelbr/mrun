@@ -21,6 +21,12 @@ var fs = require('fs')
         cb(err, data);
       });
     }
+  , dependencies = {
+      "catw": "*"
+    , "watchify": "*"
+    , "browserify": "*"
+    , "less": "*"
+  }
   , scriptGenerator = function (styleFolder, browserFolder, targetFolder) {
     styleFolder = styleFolder || 'style';
     browserFolder = browserFolder || 'browser';
@@ -35,26 +41,27 @@ var fs = require('fs')
       , "build": "npm run build-css && npm run build-js"
     };
   }
-  , setContent = function (input, newSetup) {
-      input.scripts = input.scripts || {};
-      newSetup = newSetup || {};
-      var newScripts = scriptGenerator(newSetup.style, newSetup.browser, newSetup.target);
-      Object.keys(newScripts).forEach(function (key) {
-        input.scripts[key] = newScripts[key];
+  , setContent = function (field, input, newSetup) {
+      input[field] = input[field] || {};
+      Object.keys(newSetup).forEach(function (key) {
+        input[field][key] = newSetup[key];
       });
       return input;
     }
   ;
 
-
 module.exports = function (settings, cb) {
   if (typeof settings === 'function') {
     cb = settings;
-    settings = void 0;
+    settings = {};
   }
   readFile(function (err, data) {
     if (err) return cb(err);
-    var newInput = setContent(data, settings);
+    var newInput = setContent("scripts"
+          , data
+          , scriptGenerator(settings.style, settings.browser, settings.target)
+        );
+    newInput = setContent("devDependencies", newInput, dependencies);
     saveFile(newInput, cb);
   });
 };
