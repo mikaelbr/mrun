@@ -44,6 +44,7 @@ var fs = require('fs')
   , setContent = function (field, input, newSetup) {
       input[field] = input[field] || {};
       Object.keys(newSetup).forEach(function (key) {
+        if (input[field][key]) return;
         input[field][key] = newSetup[key];
       });
       return input;
