@@ -4,7 +4,7 @@
   "description": "A simple tool for setting script properties on packages.json for watching/building less and browserify code.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha test/"
   },
   "bin": {
     "mrun": "./bin/mrun"
@@ -17,5 +17,9 @@
     "npm"
   ],
   "author": "Mikael Brevik <mikaelbre@gmail.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "should": "~2.1.1",
+    "mocha": "~1.16.2"
+  }
 }
