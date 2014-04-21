@@ -6,7 +6,7 @@ build or watch less and browserify code as described by [substack](https://gist.
 in [this gist](https://gist.github.com/substack/7819530).
 
 Instead of copypasting the code from the gist you can automaticly insert it into
-your ```package.json```file. You can also define the folders you want to use.
+your ```package.json``` file. You can also define the folders you want to use.
 
 ## Installing
 
@@ -30,7 +30,7 @@ less and javascripts files.
 -----
 
 Argument overview:
-Style directory: Where the less files are
+Style directory: Where the less files are.
 Browser code directory: Where the browserify compatible code resides.
 Target directory: Where the compiled files are placed.
 
@@ -71,7 +71,7 @@ mrun({
 
 ## Credits
 
-This is a really simple module and just ment to work as a convenient. All creative
+This is a really simple module and just meant for convenience. All creative
 credit, and thought work belongs to substack and [this gist](https://gist.github.com/substack/7819530).
 
 ## Contribute
