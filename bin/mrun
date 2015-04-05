@@ -55,7 +55,7 @@ function usage () {
               , "-----"
               , ""
               , "Update package.json file with run scripts text to build or watch"
-              , "less and javascripts files."
+              , "less and javascripts files. Entry file for less and js should be app.{js,css}"
               , ""
               , "-----"
               , ""

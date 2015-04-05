@@ -2,11 +2,18 @@ mrun - A npm module for setting npm run properties to build/watch less and brows
 ===
 
 A simple npm/terminal tool to set your package.json file to have scripts to
-build or watch less and browserify code as described by [substack](https://gist.github.com/substack)
-in [this gist](https://gist.github.com/substack/7819530).
+build or watch less and browserify code. CSS will also be autoprefixed.
 
-Instead of copypasting the code from the gist you can automaticly insert it into
-your ```package.json``` file. You can also define the folders you want to use.
+Following tools will be set as dependencies:
+
+ * autoprefixer
+ * wr
+ * watchify
+ * browserify
+ * less
+
+
+__Entry file for less and js should be `app.{js,css}`__
 
 ## Installing
 
@@ -25,7 +32,7 @@ Usage: mrun [ "style directory" "browser code directory" "target directory" ]
 -----
 
 Update package.json file with run scripts text to build or watch
-less and javascripts files.
+less and javascripts files. Entry file for less and js should be app.{js,css}
 
 -----
 
@@ -68,13 +75,3 @@ mrun({
     , target: 'anotherTargetDirectory'
   }, handleRespone);
 ```
-
-## Credits
-
-This is a really simple module and just meant for convenience. All creative
-credit, and thought work belongs to substack and [this gist](https://gist.github.com/substack/7819530).
-
-## Contribute
-
-I'm open for pull requests. I want to expand this module by adding tests to make it more robust
-and possibly expand the functionality.
