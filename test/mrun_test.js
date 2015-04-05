@@ -1,6 +1,5 @@
-var should = require("should")
-  , create = require("../mrun").create
-  ;
+var should = require("should"),
+    create = require("../mrun").create;
 
 describe("mrun", function () {
 
@@ -96,7 +95,8 @@ describe("mrun", function () {
     }, function (data, cb) {
       data.should.have.property("devDependencies");
       stub.should.have.property("devDependencies").with.property("mocha");
-      stub.should.have.property("devDependencies").with.property("catw", "*");
+      stub.should.have.property("devDependencies").with.property("autoprefixer", "*");
+      stub.should.have.property("devDependencies").with.property("wr", "*");
       stub.should.have.property("devDependencies").with.property("watchify", "*");
       stub.should.have.property("devDependencies").with.property("browserify", "*");
       stub.should.have.property("devDependencies").with.property("less", "*");
@@ -122,7 +122,7 @@ describe("mrun", function () {
   });
 
   it("should have watch-css to default folder of 'style' and output 'static'", function (done) {
-    var defaultValue = "catw -c 'lessc -' 'style/*.less' -o static/bundle.css -v";
+    var defaultValue = "wr 'lessc --include-path=style/ style/app.less static/bundle.css' style/";
     var stub = {
       name: "Test"
     };
@@ -137,7 +137,7 @@ describe("mrun", function () {
   });
 
   it("should have watch-js to default folder of 'browser' and output 'static'", function (done) {
-    var defaultValue = "watchify browser/*.js -o static/bundle.js -dv";
+    var defaultValue = "watchify browser/app.js -o static/bundle.js -dv";
     var stub = {
       name: "Test"
     };
@@ -167,7 +167,7 @@ describe("mrun", function () {
   });
 
   it("should have build-css have set default values", function (done) {
-    var defaultValue = "catw -c 'lessc -' 'style/*.less' > static/bundle.css";
+    var defaultValue = "lessc style/app.less static/bundle.css";
     var stub = {
       name: "Test"
     };
@@ -182,7 +182,7 @@ describe("mrun", function () {
   });
 
   it("should have build-js have set default values", function (done) {
-    var defaultValue = "browserify browser/*.js > static/bundle.js";
+    var defaultValue = "browserify browser/app.js > static/bundle.js";
     var stub = {
       name: "Test"
     };
@@ -213,18 +213,20 @@ describe("mrun", function () {
 
 
   it("should be able to override default folders", function (done) {
-    var styleFolder = 'foo1'
-      , targetFolder = 'foo2'
-      , browserFolder = 'foo3'
-      , defaultValues = {
-        "watch-css": "catw -c 'lessc -' '" + styleFolder + "/*.less' -o " + targetFolder + "/bundle.css -v"
-      , "watch-js": "watchify " + browserFolder + "/*.js -o " + targetFolder + "/bundle.js -dv"
-      , "build-css": "catw -c 'lessc -' '" + styleFolder + "/*.less' > " + targetFolder + "/bundle.css"
-      , "build-js": "browserify " + browserFolder + "/*.js > " + targetFolder + "/bundle.js"
-    };
+    var styleFolder = 'foo1',
+        targetFolder = 'foo2',
+        browserFolder = 'foo3',
+        defaultValues = {
+          "watch-css": "wr 'lessc --include-path=" + styleFolder + "/ " + styleFolder + "/app.less " + targetFolder + "/bundle.css' " + styleFolder + "/",
+          "watch-js": "watchify " + browserFolder + "/app.js -o " + targetFolder + "/bundle.js -dv",
+          "build-css": "lessc " + styleFolder + "/app.less " + targetFolder + "/bundle.css",
+          "build-js": "browserify " + browserFolder + "/app.js > " + targetFolder + "/bundle.js",
+        };
+
     var stub = {
       name: "Test"
     };
+
     var mrun = create(function (cb) {
       stub.should.not.have.property("scripts");
       cb(void 0, stub);
@@ -235,6 +237,7 @@ describe("mrun", function () {
       stub.should.have.property("scripts").with.property("build-js", defaultValues['build-js']);
       done();
     });
+
     mrun({
         "style": styleFolder
       , "browser": browserFolder

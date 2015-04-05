@@ -1,11 +1,11 @@
 'use strict';
 
-var fs = require('fs')
-  , path = require('path')
-  , util = require('util')
-  , file = path.join(process.cwd(), 'package.json')
-  , io = {
-    read: function (cb) {
+var fs = require('fs'),
+    path = require('path'),
+    util = require('util'),
+    file = path.join(process.cwd(), 'package.json'),
+    io = {
+      read: function (cb) {
         fs.readFile(file, function (err, data) {
           var jsonData;
           if (err) return cb('Theres no package.json file in this directory.');
@@ -16,50 +16,20 @@ var fs = require('fs')
           }
           return cb(void 0, jsonData);
         });
-      }
-    , write: function (data, cb) {
+      },
+      write: function (data, cb) {
         fs.writeFile(file, JSON.stringify(data, null, 2), function (err) {
           cb(err, data);
         });
       }
-  }
-  , dependencies = {
-      "catw": "*"
-    , "watchify": "*"
-    , "browserify": "*"
-    , "less": "*"
-  }
-  , scriptGenerator = function (styleFolder, browserFolder, targetFolder) {
-    styleFolder = styleFolder || 'style';
-    browserFolder = browserFolder || 'browser';
-    targetFolder = targetFolder || 'static';
-
-    return {
-        "watch-css": "catw -c 'lessc -' '" + styleFolder + "/*.less' -o " + targetFolder + "/bundle.css -v"
-      , "watch-js": "watchify " + browserFolder + "/*.js -o " + targetFolder + "/bundle.js -dv"
-      , "watch": "npm run watch-css & npm run watch-js"
-      , "build-css": "catw -c 'lessc -' '" + styleFolder + "/*.less' > " + targetFolder + "/bundle.css"
-      , "build-js": "browserify " + browserFolder + "/*.js > " + targetFolder + "/bundle.js"
-      , "build": "npm run build-css && npm run build-js"
+    },
+    dependencies = {
+      'autoprefixer': '*',
+      'wr': '*',
+      'watchify': '*',
+      'browserify': '*',
+      'less': '*'
     };
-  }
-  , setContent = function (field, input, newSetup) {
-      input[field] = input[field] || {};
-      Object.keys(newSetup).forEach(function (key) {
-        if (input[field][key]) return;
-        input[field][key] = newSetup[key];
-      });
-      return input;
-    }
-  , handleFileIO = function (data, settings) {
-      settings = settings || {};
-      var newInput = setContent("scripts"
-            , data
-            , scriptGenerator(settings.style, settings.browser, settings.target)
-          );
-      return setContent("devDependencies", newInput, dependencies);
-    }
-  ;
 
 var mrun = module.exports = function (settings, cb) {
   if (typeof settings === 'function') {
@@ -78,3 +48,35 @@ module.exports.create = function (read, write) {
   io.write = write;
   return mrun;
 };
+
+function scriptGenerator (styleFolder, browserFolder, targetFolder) {
+  styleFolder = styleFolder || 'style';
+  browserFolder = browserFolder || 'browser';
+  targetFolder = targetFolder || 'static';
+
+  return {
+    'watch-css': "wr 'lessc --include-path=" + styleFolder + '/ ' + styleFolder + '/app.less ' + targetFolder + "/bundle.css' " + styleFolder + '/',
+    'watch-js': 'watchify ' + browserFolder + '/app.js -o ' + targetFolder + '/bundle.js -dv',
+    'watch': 'npm run watch-css & npm run watch-js',
+    'preprocess': 'autoprefixer ' + targetFolder + '/bundle.css',
+    'build-css': 'lessc ' + styleFolder + '/app.less ' + targetFolder + '/bundle.css',
+    'build-js': 'browserify ' + browserFolder + '/app.js > ' + targetFolder + '/bundle.js',
+    'build': 'npm run build-css && npm run build-js',
+  };
+}
+function setContent (field, input, newSetup) {
+  input[field] = input[field] || {};
+  Object.keys(newSetup).forEach(function (key) {
+    if (input[field][key]) return;
+    input[field][key] = newSetup[key];
+  });
+  return input;
+}
+function handleFileIO (data, settings) {
+  settings = settings || {};
+  var newInput = setContent('scripts'
+        , data
+        , scriptGenerator(settings.style, settings.browser, settings.target)
+      );
+  return setContent('devDependencies', newInput, dependencies);
+}
