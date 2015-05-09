@@ -122,7 +122,7 @@ describe("mrun", function () {
   });
 
   it("should have watch-css to default folder of 'style' and output 'static'", function (done) {
-    var defaultValue = "wr 'lessc --include-path=style/ style/app.less static/bundle.css' style/";
+    var defaultValue = "wr 'npm run build-css' style/";
     var stub = {
       name: "Test"
     };
@@ -167,7 +167,7 @@ describe("mrun", function () {
   });
 
   it("should have build-css have set default values", function (done) {
-    var defaultValue = "lessc style/app.less static/bundle.css";
+    var defaultValue = "lessc --include-path=style/ style/app.less static/bundle.css && npm run preprocess";
     var stub = {
       name: "Test"
     };
@@ -182,7 +182,7 @@ describe("mrun", function () {
   });
 
   it("should have build-js have set default values", function (done) {
-    var defaultValue = "browserify browser/app.js > static/bundle.js";
+    var defaultValue = "browserify browser/app.js -o static/bundle.js";
     var stub = {
       name: "Test"
     };
@@ -197,7 +197,7 @@ describe("mrun", function () {
   });
 
   it("should have 'build' set to correct script", function (done) {
-    var defaultValue = "npm run build-css && npm run build-js";
+    var defaultValue = "npm run build-css; npm run build-js";
     var stub = {
       name: "Test"
     };
@@ -217,10 +217,10 @@ describe("mrun", function () {
         targetFolder = 'foo2',
         browserFolder = 'foo3',
         defaultValues = {
-          "watch-css": "wr 'lessc --include-path=" + styleFolder + "/ " + styleFolder + "/app.less " + targetFolder + "/bundle.css' " + styleFolder + "/",
+          "watch-css": "wr 'npm run build-css' " + styleFolder + "/",
           "watch-js": "watchify " + browserFolder + "/app.js -o " + targetFolder + "/bundle.js -dv",
-          "build-css": "lessc " + styleFolder + "/app.less " + targetFolder + "/bundle.css",
-          "build-js": "browserify " + browserFolder + "/app.js > " + targetFolder + "/bundle.js",
+          "build-css": "lessc --include-path=" + styleFolder + "/ " + styleFolder + "/app.less " + targetFolder + "/bundle.css && npm run preprocess",
+          "build-js": "browserify " + browserFolder + "/app.js -o " + targetFolder + "/bundle.js",
         };
 
     var stub = {

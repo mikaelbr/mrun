@@ -59,7 +59,7 @@ function scriptGenerator (styleFolder, browserFolder, targetFolder) {
     'watch-js': 'watchify ' + browserFolder + '/app.js -o ' + targetFolder + '/bundle.js -dv',
     'watch': 'npm run watch-css & npm run watch-js',
     'preprocess': 'autoprefixer ' + targetFolder + '/bundle.css',
-    'build-css': 'lessc ' + styleFolder + '/app.less ' + targetFolder + '/bundle.css && npm run preprocess',
+    'build-css': 'lessc --include-path=' + styleFolder + '/ ' + styleFolder + '/app.less ' + targetFolder + '/bundle.css && npm run preprocess',
     'build-js': 'browserify ' + browserFolder + '/app.js -o ' + targetFolder + '/bundle.js',
     'build': 'npm run build-css; npm run build-js',
   };
