@@ -1,6 +1,6 @@
 {
   "name": "mrun",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "A simple tool for setting script properties on packages.json for watching/building less and browserify code.",
   "main": "index.js",
   "scripts": {
