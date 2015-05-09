@@ -55,13 +55,13 @@ function scriptGenerator (styleFolder, browserFolder, targetFolder) {
   targetFolder = targetFolder || 'static';
 
   return {
-    'watch-css': "wr 'lessc --include-path=" + styleFolder + '/ ' + styleFolder + '/app.less ' + targetFolder + "/bundle.css' " + styleFolder + '/',
+    'watch-css': "wr 'npm run build-css' " + styleFolder + '/',
     'watch-js': 'watchify ' + browserFolder + '/app.js -o ' + targetFolder + '/bundle.js -dv',
     'watch': 'npm run watch-css & npm run watch-js',
     'preprocess': 'autoprefixer ' + targetFolder + '/bundle.css',
-    'build-css': 'lessc ' + styleFolder + '/app.less ' + targetFolder + '/bundle.css',
-    'build-js': 'browserify ' + browserFolder + '/app.js > ' + targetFolder + '/bundle.js',
-    'build': 'npm run build-css && npm run build-js',
+    'build-css': 'lessc ' + styleFolder + '/app.less ' + targetFolder + '/bundle.css && npm run preprocess',
+    'build-js': 'browserify ' + browserFolder + '/app.js -o ' + targetFolder + '/bundle.js',
+    'build': 'npm run build-css; npm run build-js',
   };
 }
 function setContent (field, input, newSetup) {
